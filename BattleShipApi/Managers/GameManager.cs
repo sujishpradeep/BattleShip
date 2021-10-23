@@ -35,7 +35,7 @@ namespace BattleShipApi.Managers
             var newBoard = _boardDataProcessing.Create(board);
             return BoardResult.FromSuccess(newBoard);
         }
-        public ResultDTO<BoardState> PlaceBattleShipToBoard(int boardID, BattleShipType battleShipType, BattleShipAllignment BattleShipAllignment, Cell StartingCell)
+        public ResultDTO<BoardState> PlaceBattleShipToBoard(string boardID, BattleShipType battleShipType, BattleShipAllignment BattleShipAllignment, Cell StartingCell)
         {
             var board = _boardDataProcessing.GetByID(boardID);
 
@@ -51,7 +51,7 @@ namespace BattleShipApi.Managers
 
         }
 
-        public AttackResponse Attack(int boardID, Cell cell)
+        public AttackResponse Attack(string boardID, Cell cell)
         {
             throw new System.NotImplementedException();
         }
