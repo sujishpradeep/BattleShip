@@ -29,10 +29,10 @@ namespace BattleShipApi
         {
 
             services.AddMemoryCache();
-            services.AddSingleton<ICacheProvider, CacheProvider>();
 
+            services.AddScoped<ICacheProvider, CacheProvider>();
             services.AddScoped<IBoardDataProcessing, BoardDataProcessing>();
-            services.AddScoped<IBoardDataProcessing, BoardDataProcessing>();
+            services.AddScoped<BoardStateCache>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
