@@ -12,6 +12,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using BattleShipApi.Managers;
 
 namespace BattleShipApi
 {
@@ -30,9 +31,13 @@ namespace BattleShipApi
 
             services.AddMemoryCache();
 
+            services.AddScoped<IGameManager, GameManager>();
             services.AddScoped<ICacheProvider, CacheProvider>();
             services.AddScoped<IBoardDataProcessing, BoardDataProcessing>();
             services.AddScoped<BoardStateCache>();
+
+            services.AddAuthorization();
+            services.AddControllers();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
