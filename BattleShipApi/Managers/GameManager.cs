@@ -25,12 +25,12 @@ namespace BattleShipApi.Managers
 
             var OpponentBoard = _boardDataProcessing.GetOpponentBoard(gameID, playerID);
 
-            if (OpponentBoard.Color == colorPreference)
+            if (OpponentBoard?.Color == colorPreference)
             {
                 return BoardResult.FromError("Opponent has selected the same color");
             }
 
-            Board board = new Board(gameID, playerID, DefaultBoardConfig.BoardSize, colorPreference);
+            Board board = new Board(gameID, playerID, DefaultBoardConfig.MaxRows, colorPreference);
 
             var newBoard = _boardDataProcessing.Create(board);
             return BoardResult.FromSuccess(newBoard);
