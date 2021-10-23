@@ -1,5 +1,6 @@
 using BattleShipApi.Constants;
 using BattleShipApi.DataProcessing;
+using BattleShipApi.DTOs;
 using BattleShipApi.Models;
 
 namespace BattleShipApi.Managers
@@ -11,41 +12,33 @@ namespace BattleShipApi.Managers
         {
             _boardDataProcessing = boardDataProcessing;
         }
-        public Board AddBoard(int gameID, int playerID, Color colorPreference)
+        public ResultDTO<Board> AddBoard(int gameID, int playerID, Color colorPreference)
         {
+            var BoardResult = new ResultDTO<Board>();
+
             var checkIfBoardExists = _boardDataProcessing.GetByGameIDAndPlayerID(gameID, playerID);
 
             if (checkIfBoardExists != null)
             {
-                // TODO: Return error in response Model 'Board already created'
-                return null;
+                return BoardResult.FromError("Board is already created for the player");
             }
 
-            var OpponentBoard = GetOpponentBoard(gameID, playerID);
+            var OpponentBoard = _boardDataProcessing.GetOpponentBoard(gameID, playerID);
 
             if (OpponentBoard.Color == colorPreference)
             {
-                // TODO: Return error in response Model 'Color is already picked by opponent'
-                return null;
+                return BoardResult.FromError("Opponent has selected the same color");
             }
 
             Board board = new Board(gameID, playerID, DefaultBoardConfig.BoardSize, colorPreference);
 
-            var boardCreated = _boardDataProcessing.Create(board);
-
-            return boardCreated;
+            var newBoard = _boardDataProcessing.Create(board);
+            return BoardResult.FromSuccess(newBoard);
         }
         public BattleShip AddBattleShipToBoard(int boardID, BattleShipAllignment BattleShipAllignment, Cell StartingCell)
         {
             throw new System.NotImplementedException();
         }
-
-        private Board GetOpponentBoard(int gameID, int PlayerID)
-        {
-
-            return new Board();
-        }
-
 
         public AttackResponse Attack(int boardID, Cell cell)
         {
