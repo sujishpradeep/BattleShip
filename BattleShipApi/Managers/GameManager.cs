@@ -7,7 +7,7 @@ namespace BattleShipApi.Managers
     public class GameManager : IGameManager
     {
         private readonly IBoardDataProcessing _boardDataProcessing;
-        GameManager(IBoardDataProcessing boardDataProcessing)
+        public GameManager(IBoardDataProcessing boardDataProcessing)
         {
             _boardDataProcessing = boardDataProcessing;
         }
