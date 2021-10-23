@@ -5,6 +5,8 @@ VisualStudioVersion = 16.0.810.11
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleShipApi", "BattleShipApi\BattleShipApi.csproj", "{6D42636A-6C7E-411F-BE13-0800F3263690}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BattleShipApiTests", "BattleShipApiTests\BattleShipApiTests.csproj", "{F7937DE2-0901-44E1-8017-D2F2377F61DE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -15,6 +17,10 @@ Global
 		{6D42636A-6C7E-411F-BE13-0800F3263690}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{6D42636A-6C7E-411F-BE13-0800F3263690}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{6D42636A-6C7E-411F-BE13-0800F3263690}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F7937DE2-0901-44E1-8017-D2F2377F61DE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F7937DE2-0901-44E1-8017-D2F2377F61DE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F7937DE2-0901-44E1-8017-D2F2377F61DE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F7937DE2-0901-44E1-8017-D2F2377F61DE}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
