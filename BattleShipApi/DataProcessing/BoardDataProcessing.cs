@@ -6,7 +6,8 @@ namespace BattleShipApi.DataProcessing
     public interface IBoardDataProcessing
     {
         public Board Create(Board Board);
-        Board GetByGameIDAndPlayerID(int GameID, int PlayerID);
+        public Board GetByGameIDAndPlayerID(int GameID, int PlayerID);
+        public Board GetOpponentBoard(int GameID, int PlayerID);
     }
     public class BoardDataProcesing
     {
@@ -22,6 +23,11 @@ namespace BattleShipApi.DataProcessing
 
             return null;
 
+        }
+
+        public Board GetOpponentBoard(int GameID, int PlayerID)
+        {
+            return null;
         }
     }
 }

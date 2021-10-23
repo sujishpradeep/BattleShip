@@ -12,9 +12,11 @@ namespace BattleShipApiTests.Managers
     {
         Mock<IBoardDataProcessing> mockBoardDataProcessing;
         GameManager GameManager;
-        const int randomPlayerID = 111111;
-        const int randomGameID = 999999;
-
+        const int GameID = 999999;
+        const int MainPlayerID = 111111;
+        const int OpponentPlayerID = 22222;
+        const Color MainPlayerColorPreference = Color.Blue;
+        const Color OpponentColorPreference = Color.Red;
 
         [SetUp]
         public void Setup()
@@ -27,15 +29,49 @@ namespace BattleShipApiTests.Managers
         public void AddBoard_Returns_Error_If_Board_Exists_For_Game_And_Player()
         {
             // Arrage
-            Color colorPreference = Color.Blue;
-            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(randomGameID, randomPlayerID)).Returns(new Board());
+            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(GameID, MainPlayerID)).Returns(new Board());
 
             // Act
-            var BoardResult = GameManager.AddBoard(randomGameID, randomPlayerID, colorPreference);
+            var BoardResult = GameManager.AddBoard(GameID, MainPlayerID, MainPlayerColorPreference);
 
             // Assert
             Assert.IsTrue(BoardResult.IsError);
             Assert.IsTrue(BoardResult.ErrorMessage.Contains("Board is already created for the player"));
+        }
+
+        [Test]
+        public void AddBoard_Returns_Error_If_Color_Is_AlreadySelectedByOpponent()
+        {
+            // Arrage
+            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(GameID, MainPlayerID)).Returns((Board)null);
+            var opponentBoard = new Board(GameID, OpponentPlayerID, DefaultBoardConfig.BoardSize, MainPlayerColorPreference);
+            mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(GameID, MainPlayerID)).Returns(opponentBoard);
+
+            // Act
+            var BoardResult = GameManager.AddBoard(GameID, MainPlayerID, MainPlayerColorPreference);
+
+            // Assert
+            Assert.IsTrue(BoardResult.IsError);
+            Assert.IsTrue(BoardResult.ErrorMessage.Contains("Opponent has selected the same color"));
+        }
+
+        [Test]
+        public void AddBoard_Returns_Success_If_There_Are_No_Errors()
+        {
+            // Arrage
+
+            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(GameID, MainPlayerID)).Returns((Board)null);
+            var opponentBoard = new Board(GameID, OpponentPlayerID, DefaultBoardConfig.BoardSize, OpponentColorPreference);
+            mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(GameID, MainPlayerID)).Returns(opponentBoard);
+
+            // Act
+            var BoardResult = GameManager.AddBoard(GameID, MainPlayerID, MainPlayerColorPreference);
+
+            // Assert
+            Assert.IsTrue(BoardResult.IsSuccess);
+
+            mockBoardDataProcessing.Verify(m => m.Create(It.IsAny<Board>()),
+                                                        Times.Once);
         }
 
     }
