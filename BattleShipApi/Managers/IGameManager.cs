@@ -9,7 +9,7 @@ namespace BattleShipApi.Managers
         public ResultDTO<Board> AddBoard(int gameID, int playerID, Color colorPreference);
 
         // Assumption - Vertical - Top to Bottom , Horizontal - Left To Right
-        public BattleShip AddBattleShipToBoard(int boardID, BattleShipAllignment BattleShipAllignment, Cell StartingCell);
+        public ResultDTO<BoardState> PlaceBattleShipToBoard(int boardID, BattleShipType battleShipType, BattleShipAllignment BattleShipAllignment, Cell StartingCell);
 
         public AttackResponse Attack(int boardID, Cell cell);
 

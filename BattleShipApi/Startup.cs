@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BattleShipApi.DataProcessing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -27,6 +28,7 @@ namespace BattleShipApi
         {
 
             services.AddControllers();
+            services.AddScoped<IBoardDataProcessing, BoardDataProcessing>();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

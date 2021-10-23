@@ -35,9 +35,20 @@ namespace BattleShipApi.Managers
             var newBoard = _boardDataProcessing.Create(board);
             return BoardResult.FromSuccess(newBoard);
         }
-        public BattleShip AddBattleShipToBoard(int boardID, BattleShipAllignment BattleShipAllignment, Cell StartingCell)
+        public ResultDTO<BoardState> PlaceBattleShipToBoard(int boardID, BattleShipType battleShipType, BattleShipAllignment BattleShipAllignment, Cell StartingCell)
         {
-            throw new System.NotImplementedException();
+            var board = _boardDataProcessing.GetByID(boardID);
+
+            //Check over flow
+
+            //Check Max BattleShip reached
+
+            //Check overlap
+
+            //check if battleship already used
+
+            return new ResultDTO<BoardState>();
+
         }
 
         public AttackResponse Attack(int boardID, Cell cell)
