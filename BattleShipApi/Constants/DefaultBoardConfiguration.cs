@@ -4,6 +4,7 @@ namespace BattleShipApi.Constants
     {
         public static int MaxRows = 10;
         public static bool CanOverlap = false;
+        public static int MaxNumberOfShips = 5;
 
     }
 }

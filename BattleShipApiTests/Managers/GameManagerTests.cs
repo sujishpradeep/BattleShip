@@ -44,7 +44,7 @@ namespace BattleShipApiTests.Managers
         {
             // Arrage
             mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(GameID, MainPlayerID)).Returns((Board)null);
-            var opponentBoard = new Board(GameID, OpponentPlayerID, DefaultBoardConfig.MaxRows, MainPlayerColorPreference);
+            var opponentBoard = new Board(GameID, OpponentPlayerID, DefaultBoardConfig.MaxRows, DefaultBoardConfig.MaxNumberOfShips, DefaultBoardConfig.CanOverlap, MainPlayerColorPreference);
             mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(GameID, MainPlayerID)).Returns(opponentBoard);
 
             // Act
@@ -61,7 +61,7 @@ namespace BattleShipApiTests.Managers
             // Arrage
 
             mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(GameID, MainPlayerID)).Returns((Board)null);
-            var opponentBoard = new Board(GameID, OpponentPlayerID, DefaultBoardConfig.MaxRows, OpponentColorPreference);
+            var opponentBoard = new Board(GameID, OpponentPlayerID, DefaultBoardConfig.MaxRows, DefaultBoardConfig.MaxNumberOfShips, DefaultBoardConfig.CanOverlap, OpponentColorPreference);
             mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(GameID, MainPlayerID)).Returns(opponentBoard);
 
             // Act
