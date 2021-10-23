@@ -14,24 +14,24 @@ namespace BattleShipApi.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class GameController : ControllerBase
+    public class BoardController : ControllerBase
     {
-        private readonly ILogger<GameController> _logger;
-        private readonly IGameManager _gameManager;
+        private readonly ILogger<BoardManager> _logger;
+        private readonly IBoardManager _boardManagerManager;
 
-        public GameController(
-            ILogger<GameController> logger,
-            IGameManager gameManager
+        public BoardController(
+            ILogger<BoardManager> logger,
+            IBoardManager BoardManagerManager
         )
         {
             _logger = logger;
-            _gameManager = gameManager;
+            _boardManagerManager = BoardManagerManager;
         }
-        [HttpPost("board/{gameID}/{playerID}/{colorPreference}")]
+        [HttpPost("{gameID}/{playerID}/{colorPreference}")]
         public IActionResult AddBoard([Required] int gameID, [Required] int playerID, [Required] int colorPreference)
         {
 
-            var AddBoardResult = _gameManager.AddBoard(gameID, playerID, (Color)colorPreference);
+            var AddBoardResult = _boardManagerManager.Add(gameID, playerID, (Color)colorPreference);
 
             if (AddBoardResult.IsError)
             {

@@ -13,6 +13,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BattleShipApi.Managers;
+using BattleShipApi.Controllers;
 
 namespace BattleShipApi
 {
@@ -31,7 +32,7 @@ namespace BattleShipApi
 
             services.AddMemoryCache();
 
-            services.AddScoped<IGameManager, GameManager>();
+            services.AddScoped<IBoardManager, BoardManager>();
             services.AddScoped<ICacheProvider, CacheProvider>();
             services.AddScoped<IBoardDataProcessing, BoardDataProcessing>();
             services.AddScoped<BoardStateCache>();

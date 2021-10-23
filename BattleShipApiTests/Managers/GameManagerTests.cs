@@ -8,10 +8,10 @@ using System;
 
 namespace BattleShipApiTests.Managers
 {
-    public class GameManagerTests
+    public class BoardManagerTests
     {
         Mock<IBoardDataProcessing> mockBoardDataProcessing;
-        GameManager GameManager;
+        BoardManager BoardManager;
         const int GameID = 999999;
         const int MainPlayerID = 111111;
         const int OpponentPlayerID = 22222;
@@ -22,7 +22,7 @@ namespace BattleShipApiTests.Managers
         public void Setup()
         {
             mockBoardDataProcessing = new Mock<IBoardDataProcessing>();
-            GameManager = new GameManager(mockBoardDataProcessing.Object);
+            BoardManager = new BoardManager(mockBoardDataProcessing.Object);
         }
 
         [Test]
@@ -32,7 +32,7 @@ namespace BattleShipApiTests.Managers
             mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(GameID, MainPlayerID)).Returns(new Board());
 
             // Act
-            var BoardResult = GameManager.AddBoard(GameID, MainPlayerID, MainPlayerColorPreference);
+            var BoardResult = BoardManager.Add(GameID, MainPlayerID, MainPlayerColorPreference);
 
             // Assert
             Assert.IsTrue(BoardResult.IsError);
@@ -48,7 +48,7 @@ namespace BattleShipApiTests.Managers
             mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(GameID, MainPlayerID)).Returns(opponentBoard);
 
             // Act
-            var BoardResult = GameManager.AddBoard(GameID, MainPlayerID, MainPlayerColorPreference);
+            var BoardResult = BoardManager.Add(GameID, MainPlayerID, MainPlayerColorPreference);
 
             // Assert
             Assert.IsTrue(BoardResult.IsError);
@@ -65,7 +65,7 @@ namespace BattleShipApiTests.Managers
             mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(GameID, MainPlayerID)).Returns(opponentBoard);
 
             // Act
-            var BoardResult = GameManager.AddBoard(GameID, MainPlayerID, MainPlayerColorPreference);
+            var BoardResult = BoardManager.Add(GameID, MainPlayerID, MainPlayerColorPreference);
 
             // Assert
             Assert.IsTrue(BoardResult.IsSuccess);
