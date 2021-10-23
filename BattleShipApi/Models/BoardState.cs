@@ -3,8 +3,9 @@ using BattleShipApi.Constants;
 
 namespace BattleShipApi.Models
 {
-    public class BoardState : Board
+    public class BoardState
     {
+        public Board Board { get; set; }
         public BoardStatus BoardStatus { get; set; }
         public List<Cell> HitCells { get; set; }
         public List<Cell> MissedCells { get; set; }

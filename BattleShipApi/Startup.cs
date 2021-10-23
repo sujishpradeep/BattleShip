@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using BattleShipApi.Persistence;
 using BattleShipApi.DataProcessing;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -27,7 +28,10 @@ namespace BattleShipApi
         public void ConfigureServices(IServiceCollection services)
         {
 
-            services.AddControllers();
+            services.AddMemoryCache();
+            services.AddSingleton<ICacheProvider, CacheProvider>();
+
+            services.AddScoped<IBoardDataProcessing, BoardDataProcessing>();
             services.AddScoped<IBoardDataProcessing, BoardDataProcessing>();
         }
 
