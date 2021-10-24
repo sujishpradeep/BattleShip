@@ -54,7 +54,7 @@ namespace BattleShipApi.Managers
 
             if (boardState == null)
             {
-                PlaceBattleShipResult.FromError("Invalid Board ID");
+                return PlaceBattleShipResult.FromError("Invalid Board ID");
             }
 
             var battleShipType = (BattleShipType)battleShipDTO.BattleShipType;
@@ -66,7 +66,7 @@ namespace BattleShipApi.Managers
                 return PlaceBattleShipResult.FromError("Board cells will overflow if the BattleShip is placed");
             }
 
-            if (boardState.NumberOfShipsPlaced > boardState.Board.MaxNumberOfShips)
+            if (boardState.NumberOfShipsPlaced >= boardState.Board.MaxNumberOfShips)
             {
                 return PlaceBattleShipResult.FromError("Maximum number of ships placed");
             }

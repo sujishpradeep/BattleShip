@@ -7,6 +7,7 @@ using BattleShipApi.DTOs;
 using BattleShipApi.Constants;
 using System;
 using AutoFixture;
+using System.Collections.Generic;
 
 namespace BattleShipApiTests.Managers
 {
@@ -97,6 +98,121 @@ namespace BattleShipApiTests.Managers
             mockBoardDataProcessing.Verify(m => m.Create(It.IsAny<Board>()),
                                                         Times.Once);
         }
+        [Test]
+        public void PlaceBattleShip_Returns_Error_If_Board_Is_Not_Present()
+        {
+            // Arrage
+            var boardID = _fixture.Create<string>();
+            var battleShipDTO = _fixture.Create<BattleShipDTO>();
+
+            mockBoardDataProcessing.Setup(b => b.GetState(boardID)).Returns((BoardState)null);
+
+            // Act
+            var PlaceBattleShipResult = BoardManager.PlaceBattleShip(boardID, battleShipDTO);
+
+            // Assert
+            Assert.IsTrue(PlaceBattleShipResult.IsError);
+            Assert.IsTrue(PlaceBattleShipResult.ErrorMessage.Contains("Invalid Board ID"));
+
+        }
+        [Test]
+        public void PlaceBattleShip_Returns_Error_If_Board_OverFlows_When_Ships_Placed()
+        {
+            // Arrage
+            var boardID = _fixture.Create<string>();
+            var battleShipDTO = _fixture.Create<BattleShipDTO>();
+            var boardState = _fixture.Create<BoardState>();
+
+            var battleShipType = (BattleShipType)battleShipDTO.BattleShipType;
+            var battleShipAllignment = (BattleShipAllignment)battleShipDTO.BattleShipAllignment;
+            var startingCell = battleShipDTO.StartingCell;
+
+            mockBoardDataProcessing.Setup(b => b.GetState(boardID)).Returns(boardState);
+            mockBattleShipManager.Setup(s => s.CheckIfBoardWillOverFlowWhenShipIsAdded(boardState.Board, battleShipType, battleShipAllignment, startingCell)).Returns(true);
+
+            // Act
+            var PlaceBattleShipResult = BoardManager.PlaceBattleShip(boardID, battleShipDTO);
+
+            // Assert
+            Assert.IsTrue(PlaceBattleShipResult.IsError);
+            Assert.IsTrue(PlaceBattleShipResult.ErrorMessage.Contains("Board cells will overflow if the BattleShip is placed"));
+
+        }
+        [Test]
+        public void PlaceBattleShip_Returns_Error_If_Max_Allowed_Ships_In_Board_Exeeds()
+        {
+            // Arrage
+            var boardID = _fixture.Create<string>();
+            var battleShipDTO = _fixture.Create<BattleShipDTO>();
+            var boardState = _fixture.Build<BoardState>()
+                                     .Create();
+
+            //Add 1 battleShip to board
+            var battleShip = _fixture.Create<BattleShip>();
+            boardState.BattleShips.Add(battleShip);
+
+            //set max number of battleships as current number of battleships
+            boardState.Board.MaxNumberOfShips = boardState.BattleShips.Count;
+
+            var battleShipType = (BattleShipType)battleShipDTO.BattleShipType;
+            var battleShipAllignment = (BattleShipAllignment)battleShipDTO.BattleShipAllignment;
+            var startingCell = battleShipDTO.StartingCell;
+
+            mockBoardDataProcessing.Setup(b => b.GetState(boardID)).Returns(boardState);
+            mockBattleShipManager.Setup(s => s.CheckIfBoardWillOverFlowWhenShipIsAdded(boardState.Board, battleShipType, battleShipAllignment, startingCell)).Returns(false);
+
+            // Act
+            var PlaceBattleShipResult = BoardManager.PlaceBattleShip(boardID, battleShipDTO);
+
+            // Assert
+            Assert.IsTrue(PlaceBattleShipResult.IsError);
+            Assert.IsTrue(PlaceBattleShipResult.ErrorMessage.Contains("Maximum number of ships placed"));
+
+        }
+        [Test]
+        public void PlaceBattleShip_Returns_Error_If_BattleShips_WillShipsOverlap()
+        {
+            // TODO:
+
+            //Set up - boardState.Board.canOverLap as false
+            //Set up - _battleShipManager.WillShipsOverlap as true
+
+            //Asssert true, Result.IsError
+            //Assert Error Message 
+        }
+        [Test]
+        public void PlaceBattleShip_Returns_Success_If_There_Are_No_Errors()
+        {
+            // Arrage
+            var boardID = _fixture.Create<string>();
+            var battleShipDTO = _fixture.Create<BattleShipDTO>();
+            var boardState = _fixture.Build<BoardState>()
+                                     .Create();
+
+            //Add 1 battleShip to board
+            var battleShip = _fixture.Create<BattleShip>();
+            boardState.BattleShips.Add(battleShip);
+
+            //set max number of battleships as > number of battleships
+            boardState.Board.MaxNumberOfShips = boardState.BattleShips.Count + 1;
+
+            var battleShipType = (BattleShipType)battleShipDTO.BattleShipType;
+            var battleShipAllignment = (BattleShipAllignment)battleShipDTO.BattleShipAllignment;
+            var startingCell = battleShipDTO.StartingCell;
+
+            mockBoardDataProcessing.Setup(b => b.GetState(boardID)).Returns(boardState);
+            mockBattleShipManager.Setup(s => s.CheckIfBoardWillOverFlowWhenShipIsAdded(boardState.Board, battleShipType, battleShipAllignment, startingCell)).Returns(false);
+
+            // Act
+            var PlaceBattleShipResult = BoardManager.PlaceBattleShip(boardID, battleShipDTO);
+
+            // Assert
+            Assert.IsTrue(PlaceBattleShipResult.IsSuccess);
+            mockBoardDataProcessing.Verify(m => m.CreateBattleShip(It.IsAny<BattleShip>()),
+                                            Times.Once);
+
+        }
+
 
     }
 }
