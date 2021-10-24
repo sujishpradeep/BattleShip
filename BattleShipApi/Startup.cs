@@ -33,11 +33,12 @@ namespace BattleShipApi
 
             services.AddMemoryCache();
 
+            services.AddScoped<IBattleShipAllignmentStrategy, HorizontalAllignmentStrategy>();
+            services.AddScoped<IBattleShipAllignmentStrategy, VerticalAllignmentStrategy>();
+
             services.AddScoped<IBoardManager, BoardManager>();
             services.AddScoped<IBattleShipManager, BattleShipManager>();
 
-            services.AddScoped<IBattleShipAllignmentStrategy, HorizontalAllignmentStrategy>();
-            services.AddScoped<IBattleShipAllignmentStrategy, VerticalAllignmentStrategy>();
 
 
             services.AddScoped<ICacheProvider, CacheProvider>();

@@ -11,9 +11,9 @@ namespace BattleShipApi.Managers
 {
     public class BattleShipManager : IBattleShipManager
     {
-        private readonly List<IBattleShipAllignmentStrategy> _battleShipAllignmentStrategies;
+        private readonly IEnumerable<IBattleShipAllignmentStrategy> _battleShipAllignmentStrategies;
 
-        public BattleShipManager(List<IBattleShipAllignmentStrategy> battleShipAllignmentStrategies)
+        public BattleShipManager(IEnumerable<IBattleShipAllignmentStrategy> battleShipAllignmentStrategies)
         {
             this._battleShipAllignmentStrategies = battleShipAllignmentStrategies;
         }
