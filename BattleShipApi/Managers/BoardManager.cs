@@ -101,21 +101,21 @@ namespace BattleShipApi.Managers
 
             if (boardState == null)
             {
-                AttackResponseResult.FromError("Invalid Board ID");
+                return AttackResponseResult.FromError("Invalid Board ID");
             }
 
             var CellValid = CellValidator.IsValid(targetCell, boardState);
 
             if (!CellValid)
             {
-                AttackResponseResult.FromError("Invalid Target Cell");
+                return AttackResponseResult.FromError("Invalid Target Cell");
             }
 
             var CellAlreadyAttacked = checkIfCellsAlreadyAttacked(targetCell, boardState);
 
             if (CellAlreadyAttacked)
             {
-                AttackResponseResult.FromError("Target cell already hit");
+                return AttackResponseResult.FromError("Target cell already hit");
             }
 
 
