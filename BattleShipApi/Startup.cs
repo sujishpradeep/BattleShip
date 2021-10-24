@@ -33,6 +33,8 @@ namespace BattleShipApi
             services.AddMemoryCache();
 
             services.AddScoped<IBoardManager, BoardManager>();
+            services.AddScoped<IBattleShipManager, BattleShipManager>();
+
             services.AddScoped<ICacheProvider, CacheProvider>();
             services.AddScoped<IBoardDataProcessing, BoardDataProcessing>();
             services.AddScoped<BoardStateCache>();
