@@ -14,6 +14,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using BattleShipApi.Managers;
 using BattleShipApi.Controllers;
+using BattleShipApi.Strategies;
 
 namespace BattleShipApi
 {
@@ -34,6 +35,10 @@ namespace BattleShipApi
 
             services.AddScoped<IBoardManager, BoardManager>();
             services.AddScoped<IBattleShipManager, BattleShipManager>();
+
+            services.AddScoped<IBattleShipAllignmentStrategy, HorizontalAllignmentStrategy>();
+            services.AddScoped<IBattleShipAllignmentStrategy, VerticalAllignmentStrategy>();
+
 
             services.AddScoped<ICacheProvider, CacheProvider>();
             services.AddScoped<IBoardDataProcessing, BoardDataProcessing>();

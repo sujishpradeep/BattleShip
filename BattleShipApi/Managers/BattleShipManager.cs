@@ -5,38 +5,30 @@ using BattleShipApi.Constants;
 using BattleShipApi.DataProcessing;
 using BattleShipApi.DTOs;
 using BattleShipApi.Models;
+using BattleShipApi.Strategies;
 
 namespace BattleShipApi.Managers
 {
     public class BattleShipManager : IBattleShipManager
     {
+        private readonly List<IBattleShipAllignmentStrategy> _battleShipAllignmentStrategies;
 
+        public BattleShipManager(List<IBattleShipAllignmentStrategy> battleShipAllignmentStrategies)
+        {
+            this._battleShipAllignmentStrategies = battleShipAllignmentStrategies;
+        }
 
         public bool CheckIfBoardWillOverFlowWhenShipIsAdded(Board board, BattleShipType battleShipType, BattleShipAllignment battleShipAllignment, Cell startingCell)
         {
-            var battleShipLength = BattleShipTypeDefaults.GetBattleShipTypeProperty(battleShipType).Length;
-            var maxRows = board.MaxRows;
 
-            if (battleShipAllignment == BattleShipAllignment.Horizontal)
+            var battleShipAllignemtStrategy = _battleShipAllignmentStrategies.Where(b => b.GetBattleShipAllignment() == battleShipAllignment).FirstOrDefault();
+
+            if (battleShipAllignemtStrategy != null)
             {
-                var batleShipLastColumn = startingCell.ColumnID + battleShipLength;
-
-                if (batleShipLastColumn > maxRows)
-                {
-                    return true;
-                }
-            }
-            if (battleShipAllignment == BattleShipAllignment.Vertical)
-            {
-                var batleShipLastRow = startingCell.RowID + battleShipLength;
-
-                if (batleShipLastRow > maxRows)
-                {
-                    return true;
-                }
+                return battleShipAllignemtStrategy.CheckIfBoardWillOverFlowWhenShipIsAdded(board, battleShipType, startingCell);
             }
 
-            return false;
+            return true;
         }
 
         public BattleShip Setup(string boardID, BattleShipType battleShipType, BattleShipAllignment battleShipAllignment, Cell startingCell)
@@ -46,31 +38,13 @@ namespace BattleShipApi.Managers
             battleShip.BattleShipType = battleShipType;
             battleShip.BoardID = boardID;
 
-            var battleShipLength = BattleShipTypeDefaults.GetBattleShipTypeProperty(battleShipType).Length;
+            var battleShipAllignemtStrategy = _battleShipAllignmentStrategies.Where(b => b.GetBattleShipAllignment() == battleShipAllignment).FirstOrDefault();
 
+            if (battleShipAllignemtStrategy != null)
+            {
+                battleShip.CellsOccupied = battleShipAllignemtStrategy.AddBattleShipToCells(battleShip, startingCell);
+            }
 
-            if (battleShipAllignment == BattleShipAllignment.Horizontal)
-            {
-                var Row = startingCell.RowID;
-                var Column = startingCell.ColumnID;
-                for (int i = 0; i < battleShipLength; i++)
-                {
-                    var Cell = new Cell(Row, Column);
-                    battleShip.CellsOccupied.Add(Cell);
-                    Column++;
-                }
-            }
-            if (battleShipAllignment == BattleShipAllignment.Vertical)
-            {
-                var Column = startingCell.ColumnID;
-                var Row = startingCell.RowID;
-                for (int i = 0; i < battleShipLength; i++)
-                {
-                    var Cell = new Cell(Row, Column);
-                    battleShip.CellsOccupied.Add(Cell);
-                    Row++;
-                }
-            }
             return battleShip;
         }
 
