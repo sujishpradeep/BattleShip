@@ -3,6 +3,7 @@ using Moq;
 using BattleShipApi.Managers;
 using BattleShipApi.DataProcessing;
 using BattleShipApi.Models;
+using BattleShipApi.DTOs;
 using BattleShipApi.Constants;
 using System;
 using AutoFixture;
@@ -29,15 +30,15 @@ namespace BattleShipApiTests.Managers
         public void AddBoard_Returns_Error_If_Board_Exists_For_Game_And_Player()
         {
             // Arrage
-            int GameID = _fixture.Create<int>();
-            int MainPlayerID = _fixture.Create<int>();
-            int OpponentPlayerID = _fixture.Create<int>();
-            const Color MainPlayerColorPreference = Color.Blue;
+            var addBoardDTO = _fixture.Create<AddBoardDTO>();
+            var gameID = addBoardDTO.gameID.Value;
+            var playerID = addBoardDTO.playerID.Value;
 
-            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(GameID, MainPlayerID)).Returns(new Board());
+
+            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(gameID, playerID)).Returns(new Board());
 
             // Act
-            var BoardResult = BoardManager.Add(GameID, MainPlayerID, MainPlayerColorPreference);
+            var BoardResult = BoardManager.Add(addBoardDTO);
 
             // Assert
             Assert.IsTrue(BoardResult.IsError);
@@ -48,18 +49,21 @@ namespace BattleShipApiTests.Managers
         public void AddBoard_Returns_Error_If_Color_Is_AlreadySelectedByOpponent()
         {
             // Arrage
-            int GameID = _fixture.Create<int>();
-            int MainPlayerID = _fixture.Create<int>();
-            int OpponentPlayerID = _fixture.Create<int>();
-            const Color MainPlayerColorPreference = Color.Blue;
-            const Color OpponentColorPreference = Color.Blue;
+            var addBoardDTO = _fixture.Build<AddBoardDTO>()
+                                      .With(b => b.colorPreference, Color.Blue)
+                                      .Create();
+            var opponentPlayerID = _fixture.Create<int>();
+            var gameID = addBoardDTO.gameID.Value;
+            var mainPlayerID = addBoardDTO.playerID.Value;
 
-            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(GameID, MainPlayerID)).Returns((Board)null);
-            var opponentBoard = new Board(GameID, OpponentPlayerID, DefaultBoardConfig.MaxRows, DefaultBoardConfig.MaxNumberOfShips, DefaultBoardConfig.CanOverlap, OpponentColorPreference);
-            mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(GameID, MainPlayerID)).Returns(opponentBoard);
+            const Color opponentColorPreference = Color.Blue;
+
+            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(gameID, mainPlayerID)).Returns((Board)null);
+            var opponentBoard = new Board(gameID, opponentPlayerID, DefaultBoardConfig.MaxRows, DefaultBoardConfig.MaxNumberOfShips, DefaultBoardConfig.CanOverlap, opponentColorPreference);
+            mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(gameID, mainPlayerID)).Returns(opponentBoard);
 
             // Act
-            var BoardResult = BoardManager.Add(GameID, MainPlayerID, MainPlayerColorPreference);
+            var BoardResult = BoardManager.Add(addBoardDTO);
 
             // Assert
             Assert.IsTrue(BoardResult.IsError);
@@ -70,19 +74,22 @@ namespace BattleShipApiTests.Managers
         public void AddBoard_Returns_Success_If_There_Are_No_Errors()
         {
             // Arrage
-            int GameID = _fixture.Create<int>();
-            int MainPlayerID = _fixture.Create<int>();
-            int OpponentPlayerID = _fixture.Create<int>();
-            const Color MainPlayerColorPreference = Color.Blue;
-            const Color OpponentColorPreference = Color.Red;
+            var addBoardDTO = _fixture.Build<AddBoardDTO>()
+                                      .With(b => b.colorPreference, Color.Blue)
+                                      .Create();
+            var opponentPlayerID = _fixture.Create<int>();
+            var gameID = addBoardDTO.gameID.Value;
+            var mainPlayerID = addBoardDTO.playerID.Value;
+
+            const Color opponentColorPreference = Color.Red;
 
 
-            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(GameID, MainPlayerID)).Returns((Board)null);
-            var opponentBoard = new Board(GameID, OpponentPlayerID, DefaultBoardConfig.MaxRows, DefaultBoardConfig.MaxNumberOfShips, DefaultBoardConfig.CanOverlap, OpponentColorPreference);
-            mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(GameID, MainPlayerID)).Returns(opponentBoard);
+            mockBoardDataProcessing.Setup(b => b.GetByGameIDAndPlayerID(gameID, mainPlayerID)).Returns((Board)null);
+            var opponentBoard = new Board(gameID, opponentPlayerID, DefaultBoardConfig.MaxRows, DefaultBoardConfig.MaxNumberOfShips, DefaultBoardConfig.CanOverlap, opponentColorPreference);
+            mockBoardDataProcessing.Setup(b => b.GetOpponentBoard(gameID, mainPlayerID)).Returns(opponentBoard);
 
             // Act
-            var BoardResult = BoardManager.Add(GameID, MainPlayerID, MainPlayerColorPreference);
+            var BoardResult = BoardManager.Add(addBoardDTO);
 
             // Assert
             Assert.IsTrue(BoardResult.IsSuccess);
