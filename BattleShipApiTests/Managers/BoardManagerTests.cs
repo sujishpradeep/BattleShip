@@ -8,6 +8,7 @@ using BattleShipApi.Constants;
 using System;
 using AutoFixture;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BattleShipApiTests.Managers
 {
@@ -186,12 +187,17 @@ namespace BattleShipApiTests.Managers
             // Arrage
             var boardID = _fixture.Create<string>();
             var battleShipDTO = _fixture.Create<BattleShipDTO>();
-            var boardState = _fixture.Build<BoardState>()
-                                     .Create();
 
             //Add 1 battleShip to board
+            var battleShips = new List<BattleShip>();
             var battleShip = _fixture.Create<BattleShip>();
-            boardState.BattleShips.Add(battleShip);
+            battleShips.Add(battleShip);
+
+            //Build board state with 1 battleship
+            var boardState = _fixture.Build<BoardState>()
+                                      .With(b => b.BattleShips, battleShips)
+                                     .Create();
+
 
             //set max number of battleships as > number of battleships
             boardState.Board.MaxNumberOfShips = boardState.BattleShips.Count + 1;
@@ -210,6 +216,60 @@ namespace BattleShipApiTests.Managers
             Assert.IsTrue(PlaceBattleShipResult.IsSuccess);
             mockBoardDataProcessing.Verify(m => m.CreateBattleShip(It.IsAny<BattleShip>()),
                                             Times.Once);
+
+        }
+        [Test]
+        public void Attack_Returns_Error_If_Board_Is_Not_Present()
+        {
+            // TODO:
+
+        }
+        [Test]
+        public void Attack_Returns_Error_If_Cell_Is_Not_Valid()
+        {
+            // TODO:
+
+        }
+        [Test]
+        public void Attack_Returns_Error_If_CellAlreadyAttacked()
+        {
+            // TODO:
+
+        }
+        [Test]
+        public void Attack_Returns_Hit_If_Target_Cell_Has_Ship()
+        {
+            var boardID = _fixture.Create<string>();
+            var targetCell = _fixture.Build<Cell>()
+                                     .With(c => c.ColumnID, 1)
+                                     .With(c => c.RowID, 1)
+                                     .Create();
+
+            var boardState = _fixture.Create<BoardState>();
+
+            //Place a battleShip in target cell
+            var battleShip = new BattleShip();
+            battleShip.CellsOccupied.Add(targetCell);
+            boardState.BattleShips.Add(battleShip);
+
+            // Remove target Cells from already hit and missed cells 
+            boardState.HitCells = boardState.HitCells.Where(c => c != targetCell).ToList();
+            boardState.MissedCells = boardState.MissedCells.Where(c => c != targetCell).ToList();
+
+
+            mockBoardDataProcessing.Setup(b => b.GetState(boardID)).Returns(boardState);
+
+            // Act
+            var AttackResponseDTO = BoardManager.Attack(boardID, targetCell);
+
+            // Assert
+            Assert.AreEqual(AttackResponse.Hit, AttackResponseDTO.Result.AttackResponse);
+
+        }
+        [Test]
+        public void Attack_Returns_Miss_If_Target_Cell_Does_Not_Have_Ship()
+        {
+            // TODO:
 
         }
 
