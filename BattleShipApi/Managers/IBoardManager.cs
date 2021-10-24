@@ -8,10 +8,9 @@ namespace BattleShipApi.Managers
     {
         public ResultDTO<Board> Add(int gameID, int playerID, Color colorPreference);
 
-        // Assumption - Vertical - Top to Bottom , Horizontal - Left To Right
-        public ResultDTO<BoardState> PlaceBattleShip(string boardID, BattleShipType battleShipType, BattleShipAllignment BattleShipAllignment, Cell StartingCell);
+        public ResultDTO<BoardState> PlaceBattleShip(string boardID, BattleShipDTO battleShipDTO);
 
-        public AttackResponse Attack(string boardID, Cell cell);
+        public ResultDTO<AttackResponseDTO> Attack(string boardID, Cell cell);
 
     }
 }

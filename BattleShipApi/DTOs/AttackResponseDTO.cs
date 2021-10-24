@@ -5,7 +5,7 @@ namespace BattleShipApi.DTOs
 {
     public class AttackResponseDTO
     {
-        public AttackResponse response { get; set; }
+        public AttackResponse AttackResponse { get; set; }
         public BoardState BoardState { get; set; }
     }
 }

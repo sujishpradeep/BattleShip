@@ -5,6 +5,7 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using System.Threading.Tasks;
 using BattleShipApi.Constants;
+using BattleShipApi.DTOs;
 using BattleShipApi.Managers;
 using BattleShipApi.Models;
 using Microsoft.AspNetCore.Mvc;
@@ -30,6 +31,7 @@ namespace BattleShipApi.Controllers
         [HttpPost("{gameID}/{playerID}/{colorPreference}")]
         public IActionResult AddBoard([Required] int gameID, [Required] int playerID, [Required] int colorPreference)
         {
+            // TODO: Authorize requests
 
             var AddBoardResult = _boardManagerManager.Add(gameID, playerID, (Color)colorPreference);
 
@@ -39,6 +41,35 @@ namespace BattleShipApi.Controllers
             }
 
             return Ok(AddBoardResult.Result);
+        }
+
+        [HttpPost("battleShip/{boardID}")]
+        public IActionResult PlaceBattleShip(string boardID, BattleShipDTO model)
+        {
+            // TODO: Authorize requests
+
+            var placeBattleShipResult = _boardManagerManager.PlaceBattleShip(boardID, model);
+
+            if (placeBattleShipResult.IsError)
+            {
+                return BadRequest(placeBattleShipResult.ErrorMessage);
+            }
+
+            return Ok(placeBattleShipResult.Result);
+        }
+        [HttpPost("attack/{boardID}")]
+        public IActionResult Attack(string boardID, Cell model)
+        {
+            // TODO: Authorize requests
+
+            var attackResultResult = _boardManagerManager.Attack(boardID, model);
+
+            if (attackResultResult.IsError)
+            {
+                return BadRequest(attackResultResult.ErrorMessage);
+            }
+
+            return Ok(attackResultResult.Result);
         }
 
 
