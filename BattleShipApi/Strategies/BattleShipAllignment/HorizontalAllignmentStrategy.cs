@@ -19,14 +19,6 @@ namespace BattleShipApi.Strategies
                 Column++;
             }
             return battleShip.CellsOccupied;
-            // var Column = startingCell.ColumnID;
-            // var Row = startingCell.RowID;
-            // for (int i = 0; i < battleShipLength; i++)
-            // {
-            //     var Cell = new Cell(Row, Column);
-            //     battleShip.CellsOccupied.Add(Cell);
-            //     Row++;
-            // }
         }
 
         public bool CheckIfBoardWillOverFlowWhenShipIsAdded(Board board, BattleShipType battleShipType, Cell startingCell)
