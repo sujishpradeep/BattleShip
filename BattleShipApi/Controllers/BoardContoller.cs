@@ -33,6 +33,11 @@ namespace BattleShipApi.Controllers
         {
             // TODO: Authorize request if user claims has permission to add board in game.
 
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var AddBoardResult = _boardManagerManager.Add(model);
 
             if (AddBoardResult.IsError)
