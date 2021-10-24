@@ -19,9 +19,12 @@ namespace BattleShipApi.Managers
             _boardDataProcessing = boardDataProcessing;
             _battleShipManager = battleShipManager;
         }
-        public ResultDTO<Board> Add(int gameID, int playerID, Color colorPreference)
+        public ResultDTO<Board> Add(AddBoardDTO addBoardDTO)
         {
             var BoardResult = new ResultDTO<Board>();
+            var gameID = addBoardDTO.gameID;
+            var playerID = addBoardDTO.playerID;
+            var colorPreference = addBoardDTO.colorPreference;
 
             var checkIfBoardExists = _boardDataProcessing.GetByGameIDAndPlayerID(gameID, playerID);
 

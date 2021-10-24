@@ -28,12 +28,12 @@ namespace BattleShipApi.Controllers
             _logger = logger;
             _boardManagerManager = BoardManagerManager;
         }
-        [HttpPost("{gameID}/{playerID}/{colorPreference}")]
-        public IActionResult AddBoard([Required] int gameID, [Required] int playerID, [Required] int colorPreference)
+        [HttpPost()]
+        public IActionResult AddBoard(AddBoardDTO model)
         {
-            // TODO: Authorize requests
+            // TODO: Authorize request if user claims has permission to add board in game.
 
-            var AddBoardResult = _boardManagerManager.Add(gameID, playerID, (Color)colorPreference);
+            var AddBoardResult = _boardManagerManager.Add(model);
 
             if (AddBoardResult.IsError)
             {
@@ -46,7 +46,7 @@ namespace BattleShipApi.Controllers
         [HttpPost("battleShip/{boardID}")]
         public IActionResult PlaceBattleShip(string boardID, BattleShipDTO model)
         {
-            // TODO: Authorize requests
+            // TODO: Authorize requests user claims has permission place battleShip in board
 
             var placeBattleShipResult = _boardManagerManager.PlaceBattleShip(boardID, model);
 
@@ -60,7 +60,7 @@ namespace BattleShipApi.Controllers
         [HttpPost("attack/{boardID}")]
         public IActionResult Attack(string boardID, Cell model)
         {
-            // TODO: Authorize requests
+            // TODO: Authorize requests user claims has permission attack the board
 
             var attackResultResult = _boardManagerManager.Attack(boardID, model);
 

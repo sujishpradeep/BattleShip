@@ -6,7 +6,7 @@ namespace BattleShipApi.Managers
 {
     public interface IBoardManager
     {
-        public ResultDTO<Board> Add(int gameID, int playerID, Color colorPreference);
+        public ResultDTO<Board> Add(AddBoardDTO addBoardDTO);
 
         public ResultDTO<BoardState> PlaceBattleShip(string boardID, BattleShipDTO battleShipDTO);
 
