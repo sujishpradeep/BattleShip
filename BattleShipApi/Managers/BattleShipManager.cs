@@ -18,7 +18,7 @@ namespace BattleShipApi.Managers
             this._battleShipAllignmentStrategies = battleShipAllignmentStrategies;
         }
 
-        public bool CheckIfBoardWillOverFlowWhenShipIsAdded(Board board, BattleShipType battleShipType, BattleShipAllignment battleShipAllignment, Cell startingCell)
+        public bool WillBoardOverFlowIfShipPlaced(Board board, BattleShipType battleShipType, BattleShipAllignment battleShipAllignment, Cell startingCell)
         {
 
             var battleShipAllignemtStrategy = _battleShipAllignmentStrategies.Where(b => b.GetBattleShipAllignment() == battleShipAllignment).FirstOrDefault();

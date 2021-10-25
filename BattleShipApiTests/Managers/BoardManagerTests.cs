@@ -26,6 +26,8 @@ namespace BattleShipApiTests.Managers
             mockBattleShipManager = new Mock<IBattleShipManager>();
             BoardManager = new BoardManager(mockBoardDataProcessing.Object, mockBattleShipManager.Object);
             _fixture = new Fixture();
+            _fixture.Customize<Cell>(composer => composer.With(cell => cell.ColumnID, 5).With(Cell => Cell.RowID, 5));
+
         }
 
         [Test]
@@ -117,7 +119,7 @@ namespace BattleShipApiTests.Managers
 
         }
         [Test]
-        public void PlaceBattleShip_Returns_Error_If_Board_OverFlows_When_Ships_Placed()
+        public void PlaceBattleShip_Returns_Error_If_Board_OverFlows()
         {
             // Arrage
             var boardID = _fixture.Create<string>();
@@ -129,14 +131,14 @@ namespace BattleShipApiTests.Managers
             var startingCell = battleShipDTO.StartingCell;
 
             mockBoardDataProcessing.Setup(b => b.GetState(boardID)).Returns(boardState);
-            mockBattleShipManager.Setup(s => s.CheckIfBoardWillOverFlowWhenShipIsAdded(boardState.Board, battleShipType, battleShipAllignment, startingCell)).Returns(true);
+            mockBattleShipManager.Setup(s => s.WillBoardOverFlowIfShipPlaced(boardState.Board, battleShipType, battleShipAllignment, startingCell)).Returns(true);
 
             // Act
             var PlaceBattleShipResult = BoardManager.PlaceBattleShip(boardID, battleShipDTO);
 
             // Assert
-            Assert.IsTrue(PlaceBattleShipResult.IsError);
-            Assert.IsTrue(PlaceBattleShipResult.ErrorMessage.Contains("Board cells will overflow if the BattleShip is placed"));
+            // Assert.IsTrue(PlaceBattleShipResult.IsError);
+            Assert.AreEqual(PlaceBattleShipResult.ErrorMessage, "Board cells will overflow if the BattleShip is placed");
 
         }
         [Test]
@@ -145,6 +147,7 @@ namespace BattleShipApiTests.Managers
             // Arrage
             var boardID = _fixture.Create<string>();
             var battleShipDTO = _fixture.Create<BattleShipDTO>();
+
             var boardState = _fixture.Build<BoardState>()
                                      .Create();
 
@@ -160,7 +163,7 @@ namespace BattleShipApiTests.Managers
             var startingCell = battleShipDTO.StartingCell;
 
             mockBoardDataProcessing.Setup(b => b.GetState(boardID)).Returns(boardState);
-            mockBattleShipManager.Setup(s => s.CheckIfBoardWillOverFlowWhenShipIsAdded(boardState.Board, battleShipType, battleShipAllignment, startingCell)).Returns(false);
+            mockBattleShipManager.Setup(s => s.WillBoardOverFlowIfShipPlaced(boardState.Board, battleShipType, battleShipAllignment, startingCell)).Returns(false);
 
             // Act
             var PlaceBattleShipResult = BoardManager.PlaceBattleShip(boardID, battleShipDTO);
@@ -207,7 +210,7 @@ namespace BattleShipApiTests.Managers
             var startingCell = battleShipDTO.StartingCell;
 
             mockBoardDataProcessing.Setup(b => b.GetState(boardID)).Returns(boardState);
-            mockBattleShipManager.Setup(s => s.CheckIfBoardWillOverFlowWhenShipIsAdded(boardState.Board, battleShipType, battleShipAllignment, startingCell)).Returns(false);
+            mockBattleShipManager.Setup(s => s.WillBoardOverFlowIfShipPlaced(boardState.Board, battleShipType, battleShipAllignment, startingCell)).Returns(false);
 
             // Act
             var PlaceBattleShipResult = BoardManager.PlaceBattleShip(boardID, battleShipDTO);

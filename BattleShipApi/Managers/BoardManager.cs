@@ -57,10 +57,17 @@ namespace BattleShipApi.Managers
                 return PlaceBattleShipResult.FromError("Invalid Board ID");
             }
 
+            var CellValid = CellValidator.IsValid(battleShipDTO.StartingCell, boardState);
+
+            if (!CellValid)
+            {
+                return PlaceBattleShipResult.FromError("Invalid Target Cell. CRowID and Column ID should be greater than 0 and should not exeed maximum number of rows in board");
+            }
+
             var battleShipType = (BattleShipType)battleShipDTO.BattleShipType;
             var battleShipAllignment = (BattleShipAllignment)battleShipDTO.BattleShipAllignment;
 
-            var BoardWillOverFlow = _battleShipManager.CheckIfBoardWillOverFlowWhenShipIsAdded(boardState.Board, battleShipType, battleShipAllignment, battleShipDTO.StartingCell);
+            var BoardWillOverFlow = _battleShipManager.WillBoardOverFlowIfShipPlaced(boardState.Board, battleShipType, battleShipAllignment, battleShipDTO.StartingCell);
             if (BoardWillOverFlow)
             {
                 return PlaceBattleShipResult.FromError("Board cells will overflow if the BattleShip is placed");
