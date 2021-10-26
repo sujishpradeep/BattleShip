@@ -122,7 +122,7 @@ namespace BattleShipApi.Managers
 
             if (CellAlreadyAttacked)
             {
-                return AttackResponseResult.FromError("Target cell already hit");
+                return AttackResponseResult.FromError("Target cell already attacked");
             }
 
 
