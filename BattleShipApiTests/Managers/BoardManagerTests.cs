@@ -27,6 +27,8 @@ namespace BattleShipApiTests.Managers
             BoardManager = new BoardManager(mockBoardDataProcessing.Object, mockBattleShipManager.Object);
             _fixture = new Fixture();
             _fixture.Customize<Cell>(composer => composer.With(cell => cell.ColumnID, 5).With(Cell => Cell.RowID, 5));
+            _fixture.Customize<Board>(composer => composer.With(board => board.MaxRows, 10).With(Board => Board.MaxNumberOfShips, 5));
+
 
         }
 
@@ -138,7 +140,7 @@ namespace BattleShipApiTests.Managers
 
             // Assert
             // Assert.IsTrue(PlaceBattleShipResult.IsError);
-            Assert.AreEqual(PlaceBattleShipResult.ErrorMessage, "Board cells will overflow if the BattleShip is placed");
+            Assert.AreEqual("Board cells will overflow if the BattleShip is placed", PlaceBattleShipResult.ErrorMessage);
 
         }
         [Test]
