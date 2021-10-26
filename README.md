@@ -69,3 +69,71 @@ Use the boardID from response on subsequent requests
 | ---- | :-: |
 | Miss |  0  |
 | Hit  |  1  |
+
+
+### 3. Board State sample 
+```
+{
+  "boardState": {
+    "board": {
+      "boardID": "dfa3e3b0-f739-4e54-af7b-9ba60368861e",
+      "gameID": 0,
+      "playerID": 0,
+      "maxRows": 10,
+      "maxNumberOfShips": 5,
+      "canOverLap": false,
+      "color": 0
+    },
+    "boardStatus": 2,
+    "hitCells": [
+      {
+        "rowID": 6,
+        "columnID": 6
+      }
+    ],
+    "missedCells": [
+      {
+        "rowID": 1,
+        "columnID": 1
+      }
+    ],
+    "numberOfShipsPlaced": 2,
+    "battleShips": [
+      {
+        "battleShipID": "78f71dc0-2fda-4e15-9ec6-e79cc7c966e4",
+        "boardID": "dfa3e3b0-f739-4e54-af7b-9ba60368861e",
+        "battleShipType": 1,
+        "cellsOccupied": [
+          {
+            "rowID": 1,
+            "columnID": 3
+          }
+        ]
+      },
+      {
+        "battleShipID": "7c37c03c-3389-4a2f-b775-8818dcb861cc",
+        "boardID": "dfa3e3b0-f739-4e54-af7b-9ba60368861e",
+        "battleShipType": 4,
+        "cellsOccupied": [
+          {
+            "rowID": 6,
+            "columnID": 6
+          },
+          {
+            "rowID": 6,
+            "columnID": 7
+          },
+          {
+            "rowID": 6,
+            "columnID": 8
+          },
+          {
+            "rowID": 6,
+            "columnID": 9
+          }
+        ]
+      }
+    ]
+  }
+}
+```
