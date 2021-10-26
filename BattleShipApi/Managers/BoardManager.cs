@@ -61,7 +61,7 @@ namespace BattleShipApi.Managers
 
             if (!CellValid)
             {
-                return PlaceBattleShipResult.FromError("Invalid Target Cell. CRowID and Column ID should be greater than 0 and should not exeed maximum number of rows in board");
+                return PlaceBattleShipResult.FromError("Invalid Target Cell. RowID and Column ID should be greater than 0 and should not exceed maximum number of rows in board");
             }
 
             var battleShipType = (BattleShipType)battleShipDTO.BattleShipType;
