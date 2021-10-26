@@ -2,7 +2,7 @@ namespace BattleShipApi.Constants
 {
     public enum AttackResponse
     {
-        Hit = 0,
-        Miss = 1
+        Miss = 0,
+        Hit = 1
     }
 }
