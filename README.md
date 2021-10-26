@@ -71,8 +71,8 @@ Use the boardID from response on subsequent requests
 | Hit  |  1  |
 
 
-### 3. Board State sample 
-```
+### Board State sample 
+```json
 {
   "boardState": {
     "board": {
